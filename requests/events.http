@@ -1,0 +1,9 @@
+@baseUrl = http://127.0.0.1:8080
+
+### Działa już w szablonie
+GET {{baseUrl}}/actuator/health
+
+### Wlasne API odczytu zdarzen
+# Dodaj przyklady dla samodzielnie zaprojektowanej sciezki i metody z TASK.md.
+# Uwzglednij odczyt po sourceId i eventId, brak rekordu oraz bledne wejscie.
+# Zdarzenia trafiaja do aplikacji przez TCP z symulatora, nie przez HTTP POST.
