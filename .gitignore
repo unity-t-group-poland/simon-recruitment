@@ -1,0 +1,19 @@
+/target/
+/out/
+/build/
+/.idea/
+/.vscode/
+*.iml
+*.class
+__pycache__/
+*.pyc
+*.log
+.DS_Store
+Thumbs.db
+.env
+.env.*
+!.env.example
+/src/main/resources/application-local.*
+/src/test/resources/application-local.*
+
+# Maven Wrapper scripts and .mvn files belong in the repository.

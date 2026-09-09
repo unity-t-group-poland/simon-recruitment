@@ -1,0 +1,38 @@
+name: simon-recruitment
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: simon_recruitment
+      POSTGRES_USER: recruitment
+      POSTGRES_PASSWORD: local-recruitment-only
+    ports:
+      - "127.0.0.1:${DB_PORT:-54329}:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U recruitment -d simon_recruitment"]
+      interval: 2s
+      timeout: 3s
+      retries: 20
+
+  postgres-test:
+    image: postgres:16-alpine
+    profiles: ["test"]
+    environment:
+      POSTGRES_DB: simon_recruitment_test
+      POSTGRES_USER: recruitment_test
+      POSTGRES_PASSWORD: local-test-only
+    ports:
+      - "127.0.0.1:${TEST_DB_PORT:-54330}:5432"
+    tmpfs:
+      - /var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U recruitment_test -d simon_recruitment_test"]
+      interval: 2s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  postgres-data:

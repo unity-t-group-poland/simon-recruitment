@@ -1,0 +1,47 @@
+name: Verify
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: simon_recruitment_test
+          POSTGRES_USER: recruitment_test
+          POSTGRES_PASSWORD: local-test-only
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U recruitment_test -d simon_recruitment_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      TEST_DB_URL: jdbc:postgresql://127.0.0.1:5432/simon_recruitment_test
+      TEST_DB_USER: recruitment_test
+      TEST_DB_PASSWORD: local-test-only
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Set up JDK 8
+        uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
+        with:
+          distribution: temurin
+          java-version: '8'
+      - name: Build and test
+        run: ./mvnw --batch-mode --no-transfer-progress clean verify
+      - name: Verify panel simulator
+        run: python3 -m unittest discover -s tools -p test_panel_simulator.py -v

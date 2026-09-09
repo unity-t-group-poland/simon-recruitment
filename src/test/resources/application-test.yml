@@ -1,0 +1,5 @@
+spring:
+  datasource:
+    url: ${TEST_DB_URL:jdbc:postgresql://127.0.0.1:54330/simon_recruitment_test}
+    username: ${TEST_DB_USER:recruitment_test}
+    password: ${TEST_DB_PASSWORD:local-test-only}
